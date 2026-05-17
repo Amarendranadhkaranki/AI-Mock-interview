@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}InterviewAI{% endblock %} — ATS & Mock Interview</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class' };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/app.css">
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen font-sans antialiased">
+    <nav class="sticky top-0 z-50 border-b border-slate-200/80 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+            <a href="{% url 'home' %}" class="flex items-center gap-2 font-bold text-lg">
+                <span class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-sm">AI</span>
+                <span class="hidden sm:inline">Interview<span class="text-indigo-600 dark:text-indigo-400">AI</span></span>
+            </a>
+            <div class="flex items-center gap-1 sm:gap-2">
+                <a href="{% url 'upload' %}" class="px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">ATS Analyzer</a>
+                <a href="{% url 'interview_setup' %}" class="px-3 py-2 rounded-lg text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-800">Mock Interview</a>
+                <button id="theme-toggle" type="button" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" aria-label="Toggle dark mode">
+                    <span class="dark:hidden">🌙</span>
+                    <span class="hidden dark:inline">☀️</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="border-t border-slate-200 dark:border-slate-800 py-8 mt-12">
+        <div class="max-w-6xl mx-auto px-4 text-center text-sm text-slate-500">
+            InterviewAI — ATS Resume Analyzer & AI Mock Interview Platform
+        </div>
+    </footer>
+
+    <script src="/static/js/app.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

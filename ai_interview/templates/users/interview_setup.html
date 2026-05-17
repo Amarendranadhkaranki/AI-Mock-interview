@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Interview Setup{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto">
+    <h1 class="text-3xl font-bold mb-2">Mock Interview Setup</h1>
+    <p class="text-slate-600 dark:text-slate-400 mb-8">
+        Select your target role. The interview runs ~25 minutes across introduction, technical, behavioral, and closing phases.
+    </p>
+
+    <form id="setup-form" class="card p-6 sm:p-8 space-y-6">
+        {% csrf_token %}
+        <div>
+            <label for="role" class="block text-sm font-medium mb-2">Interview Role</label>
+            <select id="role" name="role" required
+                class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-4 py-3 text-sm">
+                {% for r in roles %}
+                <option value="{{ r }}">{{ r }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        {% if resume_skills %}
+        <div>
+            <p class="text-sm font-medium mb-2">Skills from your resume (used for questions)</p>
+            <div class="flex flex-wrap gap-2">
+                {% for s in resume_skills %}
+                <span class="skill-tag">{{ s }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <input type="hidden" id="resume-skills" value="{{ resume_skills_json }}">
+        <input type="hidden" id="job-description" value="{{ job_description|escape }}">
+
+        <div class="rounded-xl bg-indigo-50 dark:bg-indigo-950 p-4 text-sm text-indigo-800 dark:text-indigo-200">
+            <p class="font-medium mb-2">Interview structure</p>
+            <ul class="space-y-1 text-indigo-700 dark:text-indigo-300">
+                <li>🟢 Introduction (2–3 min)</li>
+                <li>🟡 Technical (15–18 min)</li>
+                <li>🔵 Behavioral (3–5 min)</li>
+                <li>🔴 Closing (2 min)</li>
+            </ul>
+        </div>
+
+        <button type="submit" id="start-btn" class="btn-primary w-full py-3 rounded-xl font-semibold">
+            Start Interview
+        </button>
+        <p id="setup-error" class="text-red-600 text-sm hidden"></p>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('setup-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('start-btn');
+    const err = document.getElementById('setup-error');
+    btn.disabled = true;
+    err.classList.add('hidden');
+
+    let skills = [];
+    try { skills = JSON.parse(document.getElementById('resume-skills').value || '[]'); } catch (_) {}
+
+    const res = await fetch('/api/interview/start/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrfToken() },
+        body: JSON.stringify({
+            role: document.getElementById('role').value,
+            resume_skills: skills,
+            job_description: document.getElementById('job-description').value || '',
+        }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+        err.textContent = data.error || data.detail || 'Failed to start interview.';
+        err.classList.remove('hidden');
+        btn.disabled = false;
+        return;
+    }
+    sessionStorage.setItem('interview_session', JSON.stringify(data.session));
+    window.location.href = '/interview/';
+});
+</script>
+{% endblock %}

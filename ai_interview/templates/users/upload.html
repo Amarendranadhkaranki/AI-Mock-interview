@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Upload Resume{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <h1 class="text-3xl font-bold mb-2">ATS Resume Analyzer</h1>
+    <p class="text-slate-600 dark:text-slate-400 mb-8">Upload your resume and paste the job description to get an instant ATS compatibility score.</p>
+
+    {% if error %}
+    <div class="mb-6 p-4 rounded-xl bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    <form method="POST" enctype="multipart/form-data" class="card p-6 sm:p-8 space-y-6">
+        {% csrf_token %}
+        <div>
+            <label class="block text-sm font-medium mb-2">Resume (PDF or DOCX)</label>
+            <input type="file" name="resume" accept=".pdf,.docx" required
+                class="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-indigo-50 file:text-indigo-700 dark:file:bg-indigo-950 dark:file:text-indigo-300">
+        </div>
+        <div>
+            <label class="block text-sm font-medium mb-2">Job Description</label>
+            <textarea name="jd" rows="12" required placeholder="Paste the full job description here..."
+                class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent"></textarea>
+        </div>
+        <button type="submit" class="btn-primary w-full py-3 rounded-xl font-semibold">
+            Analyze Resume
+        </button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block title %}ATS Results{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-8">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <h1 class="text-3xl font-bold">Analysis Results</h1>
+            <p class="text-slate-500 text-sm mt-1">{{ analysis.resume_filename }}</p>
+        </div>
+        <a href="{% url 'interview_setup' %}" class="btn-primary px-6 py-2.5 rounded-xl text-sm font-semibold text-center">
+            Start Mock Interview →
+        </a>
+    </div>
+
+    <div class="card p-8">
+        <div class="flex flex-col sm:flex-row items-center gap-8">
+            <div class="relative w-36 h-36 flex-shrink-0">
+                <svg class="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" class="text-slate-200 dark:text-slate-700" stroke-width="8"/>
+                    <circle cx="50" cy="50" r="42" fill="none" stroke="url(#grad)" stroke-width="8" stroke-linecap="round"
+                        stroke-dasharray="{{ score|floatformat:0 }} 264" pathLength="100"/>
+                    <defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient></defs>
+                </svg>
+                <span class="absolute inset-0 flex items-center justify-center text-3xl font-bold">{{ score }}%</span>
+            </div>
+            <div class="flex-1 grid grid-cols-2 gap-4 w-full">
+                <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900">
+                    <p class="text-xs text-slate-500 uppercase tracking-wide">Keyword Match</p>
+                    <p class="text-2xl font-bold text-indigo-600">{{ keyword_score }}%</p>
+                    <div class="mt-2 h-2 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+                        <div class="h-full bg-indigo-500 rounded-full transition-all" style="width: {{ keyword_score }}%"></div>
+                    </div>
+                </div>
+                <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900">
+                    <p class="text-xs text-slate-500 uppercase tracking-wide">Skill Match</p>
+                    <p class="text-2xl font-bold text-violet-600">{{ skill_score }}%</p>
+                    <div class="mt-2 h-2 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+                        <div class="h-full bg-violet-500 rounded-full transition-all" style="width: {{ skill_score }}%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6">
+        <div class="card p-6">
+            <h2 class="font-semibold mb-4 flex items-center gap-2"><span class="text-green-500">✓</span> Matched Skills</h2>
+            <div class="flex flex-wrap gap-2">
+                {% for s in matched_skills %}
+                <span class="skill-tag skill-matched">{{ s }}</span>
+                {% empty %}<p class="text-sm text-slate-500">No matched skills found.</p>{% endfor %}
+            </div>
+        </div>
+        <div class="card p-6">
+            <h2 class="font-semibold mb-4 flex items-center gap-2"><span class="text-red-500">✗</span> Missing Skills</h2>
+            <div class="flex flex-wrap gap-2">
+                {% for s in missing_skills %}
+                <span class="skill-tag skill-missing">{{ s }}</span>
+                {% empty %}<p class="text-sm text-slate-500">All key skills present!</p>{% endfor %}
+            </div>
+        </div>
+        <div class="card p-6">
+            <h2 class="font-semibold mb-4">Matched Keywords</h2>
+            <div class="flex flex-wrap gap-2">
+                {% for k in matched %}
+                <span class="skill-tag skill-matched">{{ k }}</span>
+                {% empty %}<p class="text-sm text-slate-500">—</p>{% endfor %}
+            </div>
+        </div>
+        <div class="card p-6">
+            <h2 class="font-semibold mb-4">Missing Keywords</h2>
+            <div class="flex flex-wrap gap-2">
+                {% for k in missing %}
+                <span class="skill-tag skill-missing">{{ k }}</span>
+                {% empty %}<p class="text-sm text-slate-500">—</p>{% endfor %}
+            </div>
+        </div>
+    </div>
+
+    {% if resume_skills %}
+    <div class="card p-6">
+        <h2 class="font-semibold mb-4">Skills detected in your resume</h2>
+        <div class="flex flex-wrap gap-2">
+            {% for s in resume_skills %}
+            <span class="skill-tag">{{ s }}</span>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="card p-6">
+        <h2 class="font-semibold mb-4">💡 Suggestions</h2>
+        <ul class="space-y-2">
+            {% for s in suggestions %}
+            <li class="flex gap-2 text-sm"><span class="text-indigo-500">→</span>{{ s }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="flex gap-4">
+        <a href="{% url 'upload' %}" class="btn-secondary px-6 py-2.5 rounded-xl text-sm font-medium">Analyze another</a>
+        <a href="{% url 'interview_setup' %}" class="btn-primary px-6 py-2.5 rounded-xl text-sm font-semibold">Practice interview</a>
+    </div>
+</div>
+{% endblock %}

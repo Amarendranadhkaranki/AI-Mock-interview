@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Interview Report{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-8">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <h1 class="text-3xl font-bold">Interview Report</h1>
+            <p class="text-slate-500">{{ session.role }} — {{ session.completed_at|date:"M d, Y H:i" }}</p>
+        </div>
+        <a href="{% url 'interview_report_pdf' session.id %}" class="btn-secondary px-5 py-2.5 rounded-xl text-sm font-medium">
+            Download PDF
+        </a>
+    </div>
+
+    <div class="grid sm:grid-cols-3 gap-4">
+        <div class="card p-6 text-center">
+            <p class="text-xs text-slate-500 uppercase">Overall</p>
+            <p class="text-4xl font-bold text-indigo-600">{{ session.overall_score|floatformat:0 }}%</p>
+        </div>
+        <div class="card p-6 text-center">
+            <p class="text-xs text-slate-500 uppercase">Technical</p>
+            <p class="text-4xl font-bold text-violet-600">{{ session.technical_score|floatformat:0 }}%</p>
+        </div>
+        <div class="card p-6 text-center">
+            <p class="text-xs text-slate-500 uppercase">Communication</p>
+            <p class="text-4xl font-bold text-emerald-600">{{ session.communication_score|floatformat:0 }}%</p>
+        </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6">
+        <div class="card p-6">
+            <h2 class="font-semibold mb-3 text-green-600">Strengths</h2>
+            <ul class="space-y-2 text-sm">
+                {% for s in report.strengths %}
+                <li>✓ {{ s }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="card p-6">
+            <h2 class="font-semibold mb-3 text-amber-600">Areas to improve</h2>
+            <ul class="space-y-2 text-sm">
+                {% for w in report.weaknesses %}
+                <li>→ {{ w }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="card p-6">
+        <h2 class="font-semibold mb-3">Suggestions</h2>
+        <ul class="space-y-2 text-sm">
+            {% for s in report.suggestions %}
+            <li class="flex gap-2"><span class="text-indigo-500">•</span>{{ s }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="card p-6">
+        <h2 class="font-semibold mb-4">Question breakdown</h2>
+        <div class="space-y-4">
+            {% for a in answers %}
+            <div class="border-b border-slate-200 dark:border-slate-700 pb-4 last:border-0">
+                <div class="flex justify-between items-start gap-2 mb-1">
+                    <span class="text-xs px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800">{{ a.phase }}</span>
+                    <span class="font-semibold text-indigo-600">{{ a.score|floatformat:0 }}%</span>
+                </div>
+                <p class="font-medium text-sm mb-1">{{ a.question_text }}</p>
+                <p class="text-sm text-slate-600 dark:text-slate-400 mb-1">{{ a.answer_text|truncatewords:60 }}</p>
+                {% if a.feedback %}<p class="text-xs text-slate-500 italic">{{ a.feedback }}</p>{% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="flex gap-4">
+        <a href="{% url 'interview_setup' %}" class="btn-primary px-6 py-2.5 rounded-xl text-sm font-semibold">New interview</a>
+        <a href="{% url 'home' %}" class="btn-secondary px-6 py-2.5 rounded-xl text-sm font-medium">Home</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,132 @@
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+
+.card {
+    background: white;
+    border-radius: 1rem;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.dark .card {
+    background: #0f172a;
+    border-color: #1e293b;
+}
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #4f46e5;
+    color: white;
+    transition: background 0.2s;
+}
+
+.btn-primary:hover {
+    background: #4338ca;
+}
+
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    color: #1e293b;
+    transition: background 0.2s;
+}
+
+.dark .btn-secondary {
+    background: #0f172a;
+    color: #e2e8f0;
+}
+
+.skill-tag {
+    display: inline-block;
+    padding: 0.25rem 0.625rem;
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background: #f1f5f9;
+    color: #334155;
+}
+
+.dark .skill-tag {
+    background: #1e293b;
+    color: #cbd5e1;
+}
+
+.skill-matched {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.dark .skill-matched {
+    background: #052e16;
+    color: #86efac;
+}
+
+.skill-missing {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.dark .skill-missing {
+    background: #450a0a;
+    color: #fca5a5;
+}
+
+.chat-bubble-ai {
+    max-width: 85%;
+    border-radius: 1rem;
+    border-bottom-left-radius: 0.25rem;
+    padding: 0.75rem 1rem;
+    background: #f1f5f9;
+    font-size: 0.875rem;
+}
+
+.dark .chat-bubble-ai {
+    background: #1e293b;
+}
+
+.chat-bubble-user {
+    max-width: 85%;
+    margin-left: auto;
+    border-radius: 1rem;
+    border-bottom-right-radius: 0.25rem;
+    padding: 0.75rem 1rem;
+    background: #4f46e5;
+    color: white;
+    font-size: 0.875rem;
+}
+
+.chat-row {
+    display: flex;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.chat-row-user {
+    display: flex;
+    justify-content: flex-end;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.mic-active {
+    box-shadow: 0 0 0 2px #ef4444;
+    background: #fee2e2 !important;
+    animation: pulse 1.5s infinite;
+}
+
+.dark .mic-active {
+    background: #450a0a !important;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
